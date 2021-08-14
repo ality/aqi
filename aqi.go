@@ -44,20 +44,17 @@ func main() {
 			&recent{},
 			&forecast{},
 		}
-		cs []chan io.WriterTo
+		cs []chan result
 		wg sync.WaitGroup
 	)
 	for _, f := range fs {
 		f := f
-		c := make(chan io.WriterTo, 1)
+		c := make(chan result, 1)
 		wg.Add(1)
 		cs = append(cs, c)
 		go func() {
 			t, err := f.Fetch(lat, long)
-			if err != nil {
-				log.Print(err)
-			}
-			c <- t
+			c <- result{t, err}
 			wg.Done()
 		}()
 	}
@@ -65,12 +62,22 @@ func main() {
 
 	w := bufio.NewWriter(os.Stdout)
 	for i, c := range cs {
+		r := <-c
+		if r.err != nil {
+			log.Print(r.err)
+			continue
+		}
 		if i > 0 {
 			w.WriteString("\n")
 		}
-		(<-c).WriteTo(w)
+		r.t.WriteTo(w)
 	}
 	w.Flush()
+}
+
+type result struct {
+	t   io.WriterTo
+	err error
 }
 
 type fetcher interface {
