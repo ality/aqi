@@ -46,7 +46,7 @@ func (s *station) WriteTo(wr io.Writer) (n int64, err error) {
 	print := func(a ...interface{}) {
 		if err == nil {
 			var m int
-			m, err = fmt.Fprintf(wr, "%-25s\t%-17s\t%-17s\t%s\n", a...)
+			m, err = fmt.Fprintf(wr, "%-25s\t%-18s\t%-18s\t%s\n", a...)
 			n += int64(m)
 		}
 	}
