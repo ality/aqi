@@ -168,6 +168,9 @@ func stationID(lat, lon float64) string {
 	// stations. if the set is large, however, we should create
 	// a vantage-point tree in O(n log n) time to get O(log n)
 	// queries.
+	//
+	// station ids can be found at:
+	// https://ww2.arb.ca.gov/applications/quality-assurance-air-monitoring-site-search-1
 
 	// the permanent air quality monitor for downtown sacramento is
 	// located on the roof of the air resources board monitoring and
